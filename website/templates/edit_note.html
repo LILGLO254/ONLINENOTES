@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Note{% endblock %}
+
+{% block content %}
+<main class="container page-shell">
+    <header class="hero">
+        <span class="eyebrow">Refine your thoughts</span>
+        <h1>Edit note</h1>
+        <p>Make a quick change and keep your ideas moving.</p>
+    </header>
+
+    <section class="content-card">
+    <form method="POST" action="{{ url_for('views.edit_note', note_id=note.note_id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="mb-3">
+            <label for="title" class="form-label">Note Title</label>
+            <input
+                type="text"
+                class="form-control"
+                id="title"
+                name="title"
+                maxlength="200"
+                value="{{ note.title }}"
+                required
+            >
+        </div>
+
+        <div class="mb-3">
+            <label for="content" class="form-label">Note Content</label>
+            <textarea
+                class="form-control"
+                id="content"
+                name="content"
+                rows="6"
+                required
+            >{{ note.content }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success"><i class="fa-solid fa-check mr-2"></i>Save changes</button>
+        <a href="{{ url_for('views.home') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</section>
+</main>
+{% endblock %}

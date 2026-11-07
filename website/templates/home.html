@@ -1,0 +1,81 @@
+ {% extends "base.html"%}
+ {% block title %}Home{% endblock %}
+ {% block content %}
+<main class="container page-shell">
+    <header class="hero">
+        <span class="eyebrow">Your personal space</span>
+        <h1>Ideas worth keeping.</h1>
+        <p>Capture your thoughts, plans, and little sparks of inspiration.</p>
+    </header>
+
+    <section class="content-card mb-5">
+        <div class="section-heading">
+            <h2>Write a new note</h2>
+            <i class="fa-regular fa-lightbulb text-warning"></i>
+        </div>
+        <form method="POST" action="{{ url_for('views.home') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="mb-3">
+            <label for="title" class="form-label">Note Title</label>
+            <input
+                type="text"
+                class="form-control"
+                id="title"
+                name="title"
+                placeholder="Enter your note title"
+                maxlength="200"
+                required
+            >
+        </div>
+
+        <div class="mb-3">
+            <label for="content" class="form-label">Note Content</label>
+            <textarea
+                class="form-control"
+                id="content"
+                name="content"
+                rows="6"
+                placeholder="Write your note here..."
+                required
+            ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success"><i class="fa-solid fa-plus mr-2"></i>Save note</button>
+        </form>
+    </section>
+
+    <section>
+    <div class="section-heading">
+        <h2>Your notes</h2>
+        {% if notes %}<span class="text-muted small">{{ notes|length }} saved</span>{% endif %}
+    </div>
+    {% if notes %}
+        <div class="notes-grid mb-4">
+            {% for note in notes %}
+                <article class="note-card">
+                    <h3>{{ note.title }}</h3>
+                    <p class="note-content">{{ note.content }}</p>
+                    <small class="note-date">{{ note.created_at or '' }}</small>
+                    <div class="note-actions">
+                        <a class="btn btn-sm btn-primary"
+                           href="{{ url_for('views.edit_note', note_id=note.note_id) }}">
+                            <i class="fa-solid fa-pen mr-1"></i>Edit
+                        </a>
+                        <form method="POST"
+                              action="{{ url_for('views.remove_note', note_id=note.note_id) }}"
+                              onsubmit="return confirm('Delete this note?');">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                <i class="fa-regular fa-trash-can mr-1"></i>Delete
+                            </button>
+                        </form>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state"><i class="fa-regular fa-note-sticky"></i><p>You haven't saved any notes yet. Your next great idea can start here.</p></div>
+    {% endif %}
+    </section>
+</main>
+ {% endblock %}

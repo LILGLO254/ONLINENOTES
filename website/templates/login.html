@@ -1,0 +1,27 @@
+{% extends "base.html"%}
+ {% block title %}login{% endblock %}
+ {% block content %}
+ <main class="auth-wrap">
+ <form method="POST" class="auth-card">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <span class="eyebrow">Welcome back</span>
+    <h1>Log in to notely</h1>
+    <p class="auth-subtitle">Pick up where your thoughts left off.</p>
+    {% if error %}
+    <p class="error-message">{{ error }}</p>
+    {% endif %}
+    <div class = "form-group">
+        <label for = "email">Email Adress</label>
+        <input type = "email" class = "form-control" id = "email" name = "email" value="{{ email_value or '' }}" placeholder="Enter Email"/>
+    </div>
+    
+     
+      <div class = "form-group">
+        <label for = "password">Password</label>
+        <input type = "password" class = "form-control" id = "password" name = "password" placeholder="Enter Password"/>
+       </div>
+       <br />
+       <button type="submit" class="btn btn-primary">Log in</button>
+  </form>
+ </main>
+  {% endblock %}
