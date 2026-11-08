@@ -27,7 +27,7 @@ def create_table():
     with create_connection() as connection:
         connection.execute("""
             CREATE TABLE IF NOT EXISTS users (
-                user_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                user_id SERIAL PRIMARY KEY,
                 user_name VARCHAR(100) NOT NULL,
                 email VARCHAR(250) UNIQUE NOT NULL,
                 password VARCHAR(255) NOT NULL
@@ -35,12 +35,13 @@ def create_table():
         """)
         connection.execute("""
             CREATE TABLE IF NOT EXISTS notes (
-                note_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-                user_id INTEGER NOT NULL REFERENCES users(user_id)
-                    ON DELETE CASCADE,
+                note_id SERIAL PRIMARY KEY,
+                user_id INTEGER NOT NULL,
                 title VARCHAR(200) NOT NULL,
                 content TEXT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(user_id)
+                    ON DELETE CASCADE
             )
         """)
 
